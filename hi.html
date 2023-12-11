@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="typingText">We're Hiring! Apply Now</h2>
+        <form id="recruitmentForm" enctype="multipart/form-data">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="cv">Upload CV:</label>
+            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+   body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 8px;
+}
+
+input, button {
+    margin-bottom: 16px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%; /* Adjust container width for small screens */
+        box-shadow: none; /* Remove box shadow on small screens if needed */
+    }
+
+    input, button {
+        width: 100%; /* Make input and button full width on small screens */
+    }
+}
+</style>
+
+<script>
+ function submitForm() {
+    const form = document.getElementById('recruitmentForm');
+    const formData = new FormData(form);
+
+    // Display "Please wait" message
+    const submitButton = form.querySelector('button');
+    submitButton.disabled = true;
+    submitButton.innerHTML = 'Please wait...';
+
+    // You can add additional validation here if needed
+
+    fetch('submit.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Display the response from the server
+        form.reset(); // Optionally, reset the form after successful submission
+
+        // Reset the submit button
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Submit';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+
+        // Reset the submit button
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Submit';
+    });
+}
+    
+ document.addEventListener('DOMContentLoaded', function () {
+    const body = document.querySelector('body');
+    const images = ['room1.jpg', 'room2.jpg', 'room3.jpg', 'room4.jpg', 'room5.jpg']; // Add your image URLs
+
+    let currentIndex = 0;
+
+    function changeBackground() {
+        body.style.backgroundImage = `url('${images[currentIndex]}')`;
+        currentIndex = (currentIndex + 1) % images.length;
+    }
+
+    // Initial background image
+    changeBackground();
+
+    // Change background image every 1 second (adjust the interval as needed)
+    setInterval(changeBackground, 1000);
+});
+    
+document.addEventListener('DOMContentLoaded', function () {
+    const typingTextElement = document.getElementById('typingText');
+    const textToType = "We're Hiring! Apply Now";
+    let charIndex = 0;
+
+    function typeText() {
+        typingTextElement.textContent = textToType.slice(0, charIndex++);
+        if (charIndex <= textToType.length) {
+            setTimeout(typeText, 100); // Adjust the typing speed (in milliseconds)
+        }
+    }
+
+    // Start typing effect
+    typeText();
+});
+</script>
